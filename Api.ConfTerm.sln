@@ -8,6 +8,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.ConfTerm.Application", "src\Api.ConfTerm.Application\Api.ConfTerm.Application.csproj", "{1500FC26-72D9-47C1-A122-0C1E9D479132}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A6E8366-56FD-48F2-97DF-DD17DC4C235F}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ignores", "Ignores", "{05849DCA-A5B6-4E51-8E9B-1C43619A2F42}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +35,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05849DCA-A5B6-4E51-8E9B-1C43619A2F42} = {3A6E8366-56FD-48F2-97DF-DD17DC4C235F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F5F9156-A556-426B-B803-3E50ECDE727B}
