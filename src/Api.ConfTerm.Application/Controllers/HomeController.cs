@@ -1,4 +1,4 @@
-﻿using Api.ConfTerm.Application.Models;
+﻿using Api.ConfTerm.Application.Objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
