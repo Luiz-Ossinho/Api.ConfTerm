@@ -1,29 +1,30 @@
+using Api.ConfTerm.Application.Extensions;
+using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Services.General;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly SetupInformationContext SetupInformationContext;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        {
+            var enviromentVariableReader = new EnviromentVariableReader();
+            SetupInformationContext = new SetupInformationContext(configuration, environment, enviromentVariableReader);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDatabases(SetupInformationContext);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +33,7 @@ namespace Api.ConfTerm.Application
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.EnsureSeed(SetupInformationContext);
             }
             else
             {
