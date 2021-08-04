@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\UseCases\" />
-    <Folder Include="Interfaces\Repositories\" />
+    <ProjectReference Include="..\src\Api.ConfTerm.Core\Api.ConfTerm.Core.csproj" />
   </ItemGroup>
 
 </Project>
