@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Api.ConfTerm.Data.Mappings;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace Api.ConfTerm.Data.Extensions
     {
         public static ModelBuilder ApplyMappingConfigurations(this ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new AnimalProductionMap());
+            modelBuilder.ApplyConfiguration(new HousingMap());
+            modelBuilder.ApplyConfiguration(new MeasurementMap());
             //modelBuilder.ApplyConfiguration(new ProductMap());
             //modelBuilder.ApplyConfiguration(new CategoryMap());
             //modelBuilder.ApplyConfiguration(new OptionMap());

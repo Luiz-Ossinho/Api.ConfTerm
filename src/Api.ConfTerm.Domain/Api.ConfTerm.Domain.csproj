@@ -4,8 +4,4 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Api.ConfTerm.Domain\Api.ConfTerm.Domain.csproj" />
-  </ItemGroup>
-
 </Project>
