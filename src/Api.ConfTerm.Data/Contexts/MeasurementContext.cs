@@ -1,10 +1,12 @@
 ﻿using Api.ConfTerm.Data.Extensions;
 using Api.ConfTerm.Domain.Entities;
+using Api.ConfTerm.Domain.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Data.Contexts
 {
-    public class MeasurementContext : DbContext
+    public class MeasurementContext : DbContext, IUnitOfWork
     {
         public MeasurementContext(DbContextOptions<MeasurementContext> options) : base(options) { }
 

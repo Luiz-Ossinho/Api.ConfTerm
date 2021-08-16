@@ -1,7 +1,7 @@
-﻿using Api.ConfTerm.Core.Interfaces.Services;
-using Api.ConfTerm.Data.Contexts;
+﻿using Api.ConfTerm.Data.Contexts;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Enums;
+using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Domain.ValueObjects;
 using Api.ConfTerm.Presentation.Objects;
 using Microsoft.AspNetCore.Builder;

@@ -1,4 +1,4 @@
-﻿using Api.ConfTerm.Core.Interfaces.Services;
+﻿using Api.ConfTerm.Domain.Interfaces.Services;
 using System;
 using System.Linq;
 using System.Security.Cryptography;

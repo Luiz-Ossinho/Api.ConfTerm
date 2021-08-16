@@ -1,7 +1,9 @@
-﻿namespace Api.ConfTerm.Application.Abstract.UseCases
+﻿using System.Threading.Tasks;
+
+namespace Api.ConfTerm.Application.Abstract.UseCases
 {
-    public interface IUseCase<in TRequest, out TResponse>
+    public interface IUseCase<in TRequest, TResponse>
     {
-        TResponse Handle(TRequest data);
+        Task<TResponse> HandleAsync(TRequest data);
     }
 }

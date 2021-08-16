@@ -38,7 +38,13 @@ namespace Api.ConfTerm.Application.Objects
             return new { Code = (int)StatusCode, Success, Errors = Errors.Select(err => err.Value) };
         }
 
-        public static ApplicationResponse OfBadRequest() => new() { StatusCode = HttpStatusCode.BadRequest, Success = false };
+        public ApplicationResponse BadRequest()
+        {
+            Success = false;
+            StatusCode = HttpStatusCode.BadRequest;
+            return this;
+        }
+
         public static ApplicationResponse<T> Of<T>(T data) => new() { Data = data, StatusCode = HttpStatusCode.OK, Success = true };
         public static ApplicationResponse OfNone() => new() { StatusCode = HttpStatusCode.OK, Success = true };
     }

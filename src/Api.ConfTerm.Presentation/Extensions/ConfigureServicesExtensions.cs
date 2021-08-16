@@ -1,18 +1,21 @@
 ﻿using Api.ConfTerm.Application.Abstract.UseCases;
 using Api.ConfTerm.Application.Services;
 using Api.ConfTerm.Application.UseCases;
-using Api.ConfTerm.Core.Interfaces.Services;
 using Api.ConfTerm.Data.Contexts;
 using Api.ConfTerm.Data.Repositories;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
+using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Presentation.Objects;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System;
+using System.Text;
 
 namespace Api.ConfTerm.Presentation.Extensions
 {
@@ -38,19 +41,64 @@ namespace Api.ConfTerm.Presentation.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services, SetupInformationContext setupInformation)
         {
             services.AddScoped<IRepository<Measurement>, GenericRepository<Measurement>>()
-                .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>();
+                .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>()
+                .AddScoped<IUserRepository, UserRepository>();
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services, SetupInformationContext setupInformation)
         {
-            services.AddScoped<IHashingService, HashingService>();
+            services.AddScoped<IUnitOfWork, MeasurementContext>()
+                .AddScoped<IHashingService, HashingService>()
+                ;
             return services;
         }
 
         public static IServiceCollection AddUseCases(this IServiceCollection services, SetupInformationContext setupInformation)
         {
-            services.AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>();
+            services.AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
+                .AddScoped<IPerformLoginUseCase, PerformLoginUseCase>()
+                //.AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
+                //.AddScoped<IInsertHousingUseCase, InsertHousingUseCase>()
+                //.AddScoped<IInsertUserUseCase, InsertUserUseCase>()
+                //.AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
+                //.AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
+                //.AddScoped<IInsertBGTHIConfortUseCase, InsertBGTHIConfortUseCase>()
+                //.AddScoped<IInsertTemperatureHumidityConfortUseCase, InsertTemperatureHumidityConfortUseCase>()
+                //.AddScoped<IRemoveTHIConfortUseCase, RemoveTHIConfortUseCase>()
+                //.AddScoped<IRemoveBGTHIConfortUseCase, RemoveBGTHIConfortUseCase>()
+                //.AddScoped<IRemoveTemperatureHumidityConfortUseCase, RemoveTemperatureHumidityConfortUseCase>()
+                //.AddScoped<IEditTHIConfortUseCase, EditTHIConfortUseCase>()
+                //.AddScoped<IEditBGTHIConfortUseCase, EditBGTHIConfortUseCase>()
+                //.AddScoped<IEditTemperatureHumidityConfortUseCase, EditTemperatureHumidityConfortUseCase>()
+                //.AddScoped<IViewReportUseCase, ViewReportUseCase>()
+                ;
+            return services;
+        }
+
+        public static IServiceCollection AddJwtAuthetication(this IServiceCollection services, SetupInformationContext setupInformation)
+        {
+            var issuerSigninKey = Encoding.ASCII.GetBytes(setupInformation.Configuration["JwtSecret"]);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(issuerSigninKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddScoped(sp => new TokenService(issuerSigninKey) as ITokenService);
+
             return services;
         }
 
