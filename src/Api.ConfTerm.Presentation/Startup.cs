@@ -24,6 +24,7 @@ namespace Api.ConfTerm.Presentation
             services.AddControllersWithViews();
 
             services.AddDatabases(SetupInformationContext)
+                .AddJwtAuthetication(SetupInformationContext)
                 .AddRepositories(SetupInformationContext)
                 .AddServices(SetupInformationContext)
                 .AddUseCases(SetupInformationContext);
@@ -43,6 +44,7 @@ namespace Api.ConfTerm.Presentation
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
