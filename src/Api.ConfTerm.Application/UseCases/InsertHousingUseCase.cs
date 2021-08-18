@@ -45,7 +45,7 @@ namespace Api.ConfTerm.Application.UseCases
             await _housingRepository.InsertAsync(hosuing);
             await _unitOfWork.SaveChangesAsync();
 
-            return response.WithCode(HttpStatusCode.Created);
+            return response.WithCode(HttpStatusCode.Created).WithData(new { HousingId = hosuing.Id });
         }
     }
 }

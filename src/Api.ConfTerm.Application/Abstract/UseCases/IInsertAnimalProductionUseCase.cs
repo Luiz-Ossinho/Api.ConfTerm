@@ -3,7 +3,7 @@ using Api.ConfTerm.Application.Objects.Requests;
 
 namespace Api.ConfTerm.Application.Abstract.UseCases
 {
-    public interface IInsertAnimalProductionUseCase : IUseCase<MeasurementRequest, ApplicationResponse>
+    public interface IInsertAnimalProductionUseCase : IUseCase<InsertAnimalProductionRequest, ApplicationResponse>
     {
     }
 }

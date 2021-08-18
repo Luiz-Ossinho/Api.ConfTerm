@@ -43,8 +43,8 @@ namespace Api.ConfTerm.Presentation.Extensions
         {
             services.AddScoped<IRepository<Measurement>, GenericRepository<Measurement>>()
                 .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>()
-                .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IRepository<Housing>, GenericRepository<Housing>>()
+                .AddScoped<IUserRepository, UserRepository>()
                 ;
             return services;
         }
@@ -59,11 +59,11 @@ namespace Api.ConfTerm.Presentation.Extensions
 
         public static IServiceCollection AddUseCases(this IServiceCollection services, SetupInformationContext setupInformation)
         {
-            services.AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
-                .AddScoped<IPerformLoginUseCase, PerformLoginUseCase>()
+            services.AddScoped<IPerformLoginUseCase, PerformLoginUseCase>()
+                .AddScoped<IInsertUserUseCase, InsertUserUseCase>()
                 .AddScoped<IInsertHousingUseCase, InsertHousingUseCase>()
                 .AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
-                //.AddScoped<IInsertUserUseCase, InsertUserUseCase>()
+                .AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
                 //.AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
                 //.AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
                 //.AddScoped<IInsertBGTHIConfortUseCase, InsertBGTHIConfortUseCase>()
