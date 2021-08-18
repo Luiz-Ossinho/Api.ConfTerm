@@ -8,6 +8,7 @@ using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Presentation.Objects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,8 +61,8 @@ namespace Api.ConfTerm.Presentation.Extensions
         {
             services.AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
                 .AddScoped<IPerformLoginUseCase, PerformLoginUseCase>()
-                //.AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
-                //.AddScoped<IInsertHousingUseCase, InsertHousingUseCase>()
+                .AddScoped<IInsertHousingUseCase, InsertHousingUseCase>()
+                .AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
                 //.AddScoped<IInsertUserUseCase, InsertUserUseCase>()
                 //.AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
                 //.AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
@@ -75,6 +76,13 @@ namespace Api.ConfTerm.Presentation.Extensions
                 //.AddScoped<IEditTemperatureHumidityConfortUseCase, EditTemperatureHumidityConfortUseCase>()
                 //.AddScoped<IViewReportUseCase, ViewReportUseCase>()
                 ;
+            return services;
+        }
+
+        public static IServiceCollection AddUserInfoInjection(this IServiceCollection services)
+        {
+            services.AddHttpContextAccessor();
+            services.AddScoped(sp => new UserInfoService(sp.GetRequiredService<IHttpContextAccessor>()) as IUserInfoService);
             return services;
         }
 

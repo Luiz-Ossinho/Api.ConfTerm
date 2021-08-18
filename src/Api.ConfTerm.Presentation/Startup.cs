@@ -27,12 +27,10 @@ namespace Api.ConfTerm.Presentation
 
             services.AddDatabases(SetupInformationContext)
                 .AddJwtAuthetication(SetupInformationContext)
+                .AddUserInfoInjection()
                 .AddRepositories(SetupInformationContext)
                 .AddServices(SetupInformationContext)
                 .AddUseCases(SetupInformationContext);
-
-            services.AddHttpContextAccessor();
-            services.AddScoped(sp => new UserInfoService(sp.GetRequiredService<IHttpContextAccessor>()) as IUserInfoService);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
