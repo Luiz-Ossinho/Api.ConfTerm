@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Domain.Enums
 {
-    public enum UserType
+    public class UserType
     {
-        Administrator,
-        Normal
+        public static UserType Administrator { get; } = new UserType { Name = "Administrator", Id = 1 };
+        public static UserType Normal { get; } = new UserType { Name = "Normal", Id = 2 };
+        public static ICollection<UserType> ValidRoles { get; } = new List<UserType> { Administrator, Normal };
+        public string Name { get; private set; }
+        public int Id { get; private set; }
+        public static bool IsValid(UserType role) => ValidRoles.Contains(role);
+        public static UserType GetValid(int id) => ValidRoles.SingleOrDefault(r => r.Id == id);
     }
 }

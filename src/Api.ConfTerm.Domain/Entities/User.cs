@@ -10,7 +10,7 @@ namespace Api.ConfTerm.Domain.Entities
         public string Name { get; set; }
         public byte[] Password { get; set; }
         public byte[] Salt { get; set; }
-        public UserType UserType { get; set; }
+        public UserType Type { get; set; }
         public Email Email { get; set; }
 
         //EF Core Property

@@ -12,8 +12,8 @@ namespace Api.ConfTerm.Data.Mappings
             builder.HasKey(user => user.Id).HasName("user_id");
             builder.Property(user => user.Password).HasColumnName("hash");
             builder.Property(user => user.Salt).HasColumnName("hash_salt");
-            builder.Property(user => user.UserType).HasColumnName("role");
             builder.OwnsOne(user=> user.Email).Property(email=>email.Value).HasColumnName("email");
+            builder.OwnsOne(user => user.Type).Property(type=> type.Id).HasColumnName("type");
             //builder.HasOne(account => account.Company).WithMany(company => company.Profiles);
             //builder.HasOne(account => account.Customer).WithOne(customer => customer.Profile).HasForeignKey<Profile>();
         }
