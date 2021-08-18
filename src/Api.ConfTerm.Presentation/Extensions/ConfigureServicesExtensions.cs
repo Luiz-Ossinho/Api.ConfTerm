@@ -42,7 +42,9 @@ namespace Api.ConfTerm.Presentation.Extensions
         {
             services.AddScoped<IRepository<Measurement>, GenericRepository<Measurement>>()
                 .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>()
-                .AddScoped<IUserRepository, UserRepository>();
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IRepository<Housing>, GenericRepository<Housing>>()
+                ;
             return services;
         }
 

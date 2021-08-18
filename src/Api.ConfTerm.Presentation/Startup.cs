@@ -1,8 +1,10 @@
 using Api.ConfTerm.Application.Services;
+using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Presentation.Extensions;
 using Api.ConfTerm.Presentation.Objects;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,6 +30,9 @@ namespace Api.ConfTerm.Presentation
                 .AddRepositories(SetupInformationContext)
                 .AddServices(SetupInformationContext)
                 .AddUseCases(SetupInformationContext);
+
+            services.AddHttpContextAccessor();
+            services.AddScoped(sp => new UserInfoService(sp.GetRequiredService<IHttpContextAccessor>()) as IUserInfoService);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

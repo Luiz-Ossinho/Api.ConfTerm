@@ -37,8 +37,8 @@ namespace Api.ConfTerm.Presentation.Extensions
                     Name = superUser.Username,
                     Salt = salt,
                     Password = hash,
-                    UserType = UserType.Administrator,
-                    Email = new Email("emailValido@confTerm.com")
+                    Email = new Email("emailValido@confTerm.com"),
+                    Type = UserType.Administrator
                 };
 
                 var housing = new Housing

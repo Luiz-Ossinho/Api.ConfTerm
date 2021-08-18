@@ -1,4 +1,4 @@
-﻿using Api.ConfTerm.Application.Objects;
+﻿using Api.ConfTerm.Application.Objects.Requests;
 using System;
 using System.Linq;
 
