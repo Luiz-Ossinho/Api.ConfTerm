@@ -5,9 +5,9 @@ using System.Linq;
 namespace Api.ConfTerm.Presentation.Objects.Comunication.Requests
 {
     public record InserirMedicaoRequest(int ProducaoAnimalId, string data, string horario, float itu, float itgu, 
-        float orvalho, float tbs, float BulboUmido, float umidade, float tg) : IPresentationRequest<MeasurementRequest>
+        float orvalho, float tbs, float BulboUmido, float umidade, float tg) : PresentationRequest<MeasurementRequest>
     {
-        public MeasurementRequest ToApplicationRequest()
+        public override MeasurementRequest ToApplicationRequest()
         {
             var horarioSplit = horario.Split(":").Select(str => int.Parse(str)).ToArray();
             var dataSplit = data.Split("/").Select(str => int.Parse(str)).ToArray();
