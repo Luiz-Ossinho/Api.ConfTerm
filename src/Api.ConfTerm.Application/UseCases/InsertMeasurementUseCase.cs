@@ -1,5 +1,6 @@
 ﻿using Api.ConfTerm.Application.Abstract.UseCases;
 using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
@@ -25,9 +26,11 @@ namespace Api.ConfTerm.Application.UseCases
             var response = ApplicationResponse.OfNone();
 
             var animalProduction = await _animalProductionRepository.GetByIdAsync(data.AnimalProductionId);
-            if (animalProduction == null)
-                return response.BadRequest()
-                    .WithError(ApplicationError.WasNullForArgument("Animal Production", "Animal Production Id"));
+
+            response.CheckFor(animalProduction != null, ApplicationError.WasNullForArgument("Animal Production", "Animal Production Id"));
+            
+            if (!response.Success)
+                return response;
 
             var measurement = data.ToMeasurement();
             measurement.AnimalProduction = animalProduction;

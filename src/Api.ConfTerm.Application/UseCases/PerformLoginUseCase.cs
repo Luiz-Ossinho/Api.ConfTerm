@@ -1,5 +1,6 @@
 ﻿using Api.ConfTerm.Application.Abstract.UseCases;
 using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Domain.ValueObjects;
@@ -25,7 +26,9 @@ namespace Api.ConfTerm.Application.UseCases
 
             if (!Email.IsValid(data.Email))
                 return response.BadRequest();
+
             var user = await _repository.GetByEmailAsync(data.Email);
+
             if (!_hashingService.Compare(data.Password, user.Password, user.Salt))
                 return response.BadRequest();
 

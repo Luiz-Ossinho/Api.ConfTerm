@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
@@ -34,7 +35,7 @@ namespace Api.ConfTerm.Application.Objects
         public virtual object ToJsonObject()
         {
             if (!Errors.Any())
-                return new { Code = (int)StatusCode, Success};
+                return new { Code = (int)StatusCode, Success };
             return new { Code = (int)StatusCode, Success, Errors = Errors.Select(err => err.Value) };
         }
 
@@ -42,6 +43,21 @@ namespace Api.ConfTerm.Application.Objects
         {
             Success = false;
             StatusCode = HttpStatusCode.BadRequest;
+            return this;
+        }
+
+        public ApplicationResponse CheckForArgument<TRequest>(TRequest request, Func<TRequest, bool> predicate, ApplicationError applicationError)
+        {
+            var predicateResult = predicate.Invoke(request);
+            if (!predicateResult)
+                BadRequest().WithError(applicationError);
+
+            return this;
+        }
+        public ApplicationResponse CheckFor(bool succsess, ApplicationError applicationError)
+        {
+            if (!succsess)
+                BadRequest().WithError(applicationError);
             return this;
         }
 
