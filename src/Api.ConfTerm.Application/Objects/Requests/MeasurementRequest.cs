@@ -9,7 +9,7 @@ namespace Api.ConfTerm.Application.Objects.Requests
         public Measurement ToMeasurement()
             => new()
             {
-                BlackGlobeHumidityIndex = BlackGlobeHumidityIndex,
+                BlackGlobeTemperatureHumidityIndex = BlackGlobeHumidityIndex,
                 BlackGlobeTemperature = BlackGlobeTemperature,
                 DewPointTemperature = DewPointTemperature,
                 DryBulbTemperature = DryBulbTemperature,

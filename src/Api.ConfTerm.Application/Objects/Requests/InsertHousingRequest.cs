@@ -2,7 +2,5 @@
 
 namespace Api.ConfTerm.Application.Objects.Requests
 {
-    public record InsertHousingRequest(string Identificantion, Email UserMail)
-    {
-    }
+    public record InsertHousingRequest(string Identificantion, Email UserMail);
 }
