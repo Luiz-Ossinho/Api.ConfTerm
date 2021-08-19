@@ -1,5 +1,4 @@
 ﻿using Api.ConfTerm.Domain.Entities.Abstract;
-using Api.ConfTerm.Domain.Enums;
 using Api.ConfTerm.Domain.ValueObjects;
 using System.Collections.Generic;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Api.ConfTerm.Domain.Enums
+namespace Api.ConfTerm.Domain.ValueObjects
 {
     public class UserType
     {

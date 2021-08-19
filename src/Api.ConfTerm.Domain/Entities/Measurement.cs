@@ -12,7 +12,7 @@ namespace Api.ConfTerm.Domain.Entities
         public float DewPointTemperature { get; set; }
         public float Humidity { get; set; }
         public float TemperatureHumidityIndex { get; set; }
-        public float BlackGlobeHumidityIndex { get; set; }
+        public float BlackGlobeTemperatureHumidityIndex { get; set; }
         public DateTime Taken { get; set; }
 
     }

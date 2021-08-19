@@ -1,5 +1,4 @@
-﻿using Api.ConfTerm.Domain.Enums;
-using Api.ConfTerm.Domain.ValueObjects;
+﻿using Api.ConfTerm.Domain.ValueObjects;
 
 namespace Api.ConfTerm.Domain.Interfaces.Services
 {

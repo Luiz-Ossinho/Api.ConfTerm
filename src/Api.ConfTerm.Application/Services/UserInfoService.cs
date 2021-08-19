@@ -1,5 +1,4 @@
-﻿using Api.ConfTerm.Domain.Enums;
-using Api.ConfTerm.Domain.Interfaces.Services;
+﻿using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Domain.ValueObjects;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
