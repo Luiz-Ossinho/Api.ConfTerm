@@ -1,5 +1,5 @@
 ﻿using Api.ConfTerm.Application.Abstract.UseCases;
-using Api.ConfTerm.Domain.Enums;
+using Api.ConfTerm.Domain.ValueObjects;
 using Api.ConfTerm.Presentation.Objects.Comunication.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -15,7 +15,6 @@ namespace Api.ConfTerm.Data.Mappings
             builder.Property(production => production.MonitoringStart).HasColumnName("monitoring_start");
             builder.Property(production => production.MonitoringEnd).HasColumnName("monitoring_start");
             builder.HasOne(production => production.Housing).WithMany(housing => housing.AnimalProductions);
-            //builder.HasOne(account => account.Customer).WithOne(customer => customer.Profile).HasForeignKey<Profile>();
         }
     }
 }

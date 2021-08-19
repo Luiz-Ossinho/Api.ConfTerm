@@ -7,6 +7,7 @@ namespace Api.ConfTerm.Domain.Entities
     public class AnimalProduction : IdentifiableEntity
     {
         public Housing Housing { get; set; }
+        public Species Species { get; set; }
         public DateTime Birthday { get; set; }
         public DateTime MonitoringStart { get; set; }
         public DateTime MonitoringEnd { get; set; }

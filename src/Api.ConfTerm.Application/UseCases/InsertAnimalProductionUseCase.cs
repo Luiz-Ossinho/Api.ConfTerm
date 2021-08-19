@@ -13,12 +13,15 @@ namespace Api.ConfTerm.Application.UseCases
     {
         private readonly IRepository<AnimalProduction> _animalProductionRepository;
         private readonly IRepository<Housing> _housingRepository;
+        private readonly IRepository<Species> _speciesRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public InsertAnimalProductionUseCase(IRepository<AnimalProduction> animalProductionRepository, IUnitOfWork unitOfWork, IRepository<Housing> housingRepository)
+        public InsertAnimalProductionUseCase(IRepository<AnimalProduction> animalProductionRepository, IUnitOfWork unitOfWork, IRepository<Housing> housingRepository,
+            IRepository<Species> speciesRepository)
         {
             _unitOfWork = unitOfWork;
             _animalProductionRepository = animalProductionRepository;
             _housingRepository = housingRepository;
+            _speciesRepository = speciesRepository;
         }
 
         public async Task<ApplicationResponse> HandleAsync(InsertAnimalProductionRequest data)
@@ -38,6 +41,10 @@ namespace Api.ConfTerm.Application.UseCases
                 MonitoringStart = data.MonitoringStart,
                 MonitoringEnd = data.MonitoringEnd
             };
+
+            var species = await _speciesRepository.GetByIdAsync(data.SpeciesId);
+            if (species != default)
+                animalProduction.Species = species;
 
             await _animalProductionRepository.InsertAsync(animalProduction);
             await _unitOfWork.SaveChangesAsync();

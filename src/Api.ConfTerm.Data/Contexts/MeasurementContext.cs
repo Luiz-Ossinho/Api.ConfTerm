@@ -2,7 +2,6 @@
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Data.Contexts
 {
@@ -26,9 +25,7 @@ namespace Api.ConfTerm.Data.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .ApplyMappingConfigurations()
-                .ApplyManyToManyMappingConfigurations();
+            modelBuilder.ApplyMappingConfigurations();
         }
     }
 }

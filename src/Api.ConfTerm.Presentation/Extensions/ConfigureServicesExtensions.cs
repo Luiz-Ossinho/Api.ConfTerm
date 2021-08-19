@@ -26,6 +26,7 @@ namespace Api.ConfTerm.Presentation.Extensions
         {
             if (setupInformation.Environment.IsDevelopment())
             {
+                // Database.db
                 var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = ":memory:", Cache = SqliteCacheMode.Shared };
                 var sqliteConnection = new SqliteConnection(connectionStringBuilder.ToString());
                 sqliteConnection.Open();
@@ -45,6 +46,7 @@ namespace Api.ConfTerm.Presentation.Extensions
                 .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>()
                 .AddScoped<IRepository<Housing>, GenericRepository<Housing>>()
                 .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IRepository<Species>, GenericRepository<Species>>()
                 ;
             return services;
         }
@@ -64,7 +66,7 @@ namespace Api.ConfTerm.Presentation.Extensions
                 .AddScoped<IInsertHousingUseCase, InsertHousingUseCase>()
                 .AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
                 .AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
-                //.AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
+                .AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
                 //.AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
                 //.AddScoped<IInsertBGTHIConfortUseCase, InsertBGTHIConfortUseCase>()
                 //.AddScoped<IInsertTemperatureHumidityConfortUseCase, InsertTemperatureHumidityConfortUseCase>()

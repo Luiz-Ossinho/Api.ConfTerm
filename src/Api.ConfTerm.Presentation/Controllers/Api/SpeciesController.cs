@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Presentation.Controllers.Api
 {
-    public class HousingController : BaseController
+    public class SpeciesController : BaseController
     {
         [HttpPost]
         [Authorize(Roles = nameof(UserType.Administrator))]
-        public async Task<IActionResult> InsertHousing([FromServices] IInsertHousingUseCase useCase, [FromBody] InserirAlojamentoRequest presentationRequest)
+        public async Task<IActionResult> InsertHousing([FromServices] IInsertSpeciesUseCase useCase, [FromBody] InserirEspecieRequest presentationRequest)
         {
             var appRequest = presentationRequest.ToApplicationRequest();
             var appResponse = await useCase.HandleAsync(appRequest);

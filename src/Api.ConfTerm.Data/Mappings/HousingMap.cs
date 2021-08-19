@@ -12,8 +12,6 @@ namespace Api.ConfTerm.Data.Mappings
             builder.HasKey(housing => housing.Id).HasName("housing_id");
             builder.Property(housing => housing.Identification).HasColumnName("identification");
             builder.HasOne(housing => housing.Owner).WithMany(user => user.Housings);
-
-            //builder.HasOne(account => account.Customer).WithOne(customer => customer.Profile).HasForeignKey<Profile>();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Api.ConfTerm.Application.Objects.Requests;
-using Api.ConfTerm.Domain.Enums;
 using Api.ConfTerm.Domain.ValueObjects;
 
 namespace Api.ConfTerm.Presentation.Objects.Comunication.Requests
