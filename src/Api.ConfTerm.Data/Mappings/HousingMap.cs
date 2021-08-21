@@ -8,9 +8,10 @@ namespace Api.ConfTerm.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Housing> builder)
         {
-            builder.ToTable("Housings");
-            builder.HasKey(housing => housing.Id).HasName("housing_id");
-            builder.Property(housing => housing.Identification).HasColumnName("identification");
+            builder.ToTable("Alojamento");
+            builder.HasKey(housing => housing.Id);
+            builder.Property(bgthi => bgthi.Id).HasColumnName("Alojamento_id");
+            builder.Property(housing => housing.Identification).HasColumnName("Indentificao");
             builder.HasOne(housing => housing.Owner).WithMany(user => user.Housings);
         }
     }

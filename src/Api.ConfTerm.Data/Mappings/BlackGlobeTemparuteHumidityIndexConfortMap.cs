@@ -9,7 +9,9 @@ namespace Api.ConfTerm.Data.Mappings
         public override void Configure(EntityTypeBuilder<BlackGlobeTemparuteHumidityIndexConfort> builder)
         {
             base.Configure(builder);
-            builder.ToTable("BlackGlobeTemparuteHumidityIndexConforts");
+            builder.ToTable("Conforto_ITGU");
+            builder.HasKey(bgthi => bgthi.Id);
+            builder.Property(bgthi => bgthi.Id).HasColumnName("Conforto_ITGU_id");
             builder.Property(bgthi => bgthi.MinimunBlackGlobeTemperatureHumidityIndex).HasColumnType("itgu_minimo");
             builder.Property(bgthi => bgthi.MaximunBlackGlobeTemperatureHumidityIndex).HasColumnType("itgu_maximo");
             builder.HasOne(bgthi => bgthi.Species).WithMany(species => species.BlackGlobeTemparuteHumidityIndexConforts);

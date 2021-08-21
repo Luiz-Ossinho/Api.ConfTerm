@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Presentation.Controllers.Api
 {
-    public class MeasurementController : BaseController
+    public class MedicaoController : BaseController
     {
         [HttpPost]
         public async Task<IActionResult> InsertMeasurement([FromServices] IInsertMeasurementUseCase useCase, [FromBody] InserirMedicaoRequest resquestBody)

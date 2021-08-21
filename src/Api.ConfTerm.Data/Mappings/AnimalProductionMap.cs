@@ -8,12 +8,13 @@ namespace Api.ConfTerm.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<AnimalProduction> builder)
         {
-            builder.ToTable("AnimalProductions");
-            builder.HasKey(production => production.Id).HasName("AnimalProduction_id");
-            builder.Property(production => production.Birthday).HasColumnName("birhday");
-            builder.Property(production => production.Equipament).HasColumnName("equipament");
-            builder.Property(production => production.MonitoringStart).HasColumnName("monitoring_start");
-            builder.Property(production => production.MonitoringEnd).HasColumnName("monitoring_start");
+            builder.ToTable("Producao_Animal");
+            builder.HasKey(production => production.Id);
+            builder.Property(bgthi => bgthi.Id).HasColumnName("ProducaoAnimal_id");
+            builder.Property(production => production.Birthday).HasColumnName("nascimento");
+            builder.Property(production => production.Equipament).HasColumnName("equipamento");
+            builder.Property(production => production.MonitoringStart).HasColumnName("inicio_monitoramento");
+            builder.Property(production => production.MonitoringEnd).HasColumnName("fim_monitoramento");
             builder.HasOne(production => production.Housing).WithMany(housing => housing.AnimalProductions);
         }
     }

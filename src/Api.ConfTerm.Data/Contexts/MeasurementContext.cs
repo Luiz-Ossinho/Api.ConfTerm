@@ -13,19 +13,16 @@ namespace Api.ConfTerm.Data.Contexts
         public DbSet<Housing> Housings { get; set; }
         public DbSet<AnimalProduction> AnimalProductions { get; set; }
         public DbSet<Measurement> Measurements { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //if (!optionsBuilder.IsConfigured)
-            //{
-            //    //To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            //    // optionsBuilder.UseSqlServer(@"Server=.\SQLExpress;Database=SchoolDB;Trusted_Connection=True;");
-            //}
-        }
+        public DbSet<Species> Species { get; set; }
+        public DbSet<TemperatureHumidityIndexConfort> THIConforts { get; set; }
+        public DbSet<TemperatureHumidityConfort> TemperatureHumidityConforts { get; set; }
+        public DbSet<BlackGlobeTemparuteHumidityIndexConfort> BGTHIConforts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyMappingConfigurations();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

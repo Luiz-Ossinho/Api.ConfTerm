@@ -8,12 +8,14 @@ namespace Api.ConfTerm.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("Users");
-            builder.HasKey(user => user.Id).HasName("user_id");
-            builder.Property(user => user.Password).HasColumnName("hash");
-            builder.Property(user => user.Salt).HasColumnName("hash_salt");
+            builder.ToTable("Usuario");
+            builder.HasKey(user => user.Id);
+            builder.Property(user => user.Id).HasColumnName("usuario_id");
+            builder.Property(user => user.Name).HasColumnName("nome");
+            builder.Property(user => user.Password).HasColumnName("senha");
+            builder.Property(user => user.Salt).HasColumnName("salt_senha");
             builder.OwnsOne(user=> user.Email).Property(email=>email.Value).HasColumnName("email");
-            builder.OwnsOne(user => user.Type).Property(type=> type.Id).HasColumnName("type");
+            builder.OwnsOne(user => user.Type).Property(type=> type.Id).HasColumnName("tipo");
         }
     }
 }

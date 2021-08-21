@@ -8,16 +8,17 @@ namespace Api.ConfTerm.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Measurement> builder)
         {
-            builder.ToTable("Measurements");
-            builder.HasKey(measurement => measurement.Id).HasName("measurement_id");
-            builder.Property(measurement => measurement.TemperatureHumidityIndex).HasColumnName("TemperatureHumidityIndex");
-            builder.Property(measurement => measurement.BlackGlobeTemperatureHumidityIndex).HasColumnName("BlackGlobeHumidityIndex");
-            builder.Property(measurement => measurement.BlackGlobeTemperature).HasColumnName("BlackGlobeTemperature");
-            builder.Property(measurement => measurement.DewPointTemperature).HasColumnName("DewPointTemperature");
-            builder.Property(measurement => measurement.DryBulbTemperature).HasColumnName("DryBulbTemperature");
-            builder.Property(measurement => measurement.Humidity).HasColumnName("Humidity");
-            builder.Property(measurement => measurement.WetBulbTemperature).HasColumnName("WetBulbTemperature");
-            builder.Property(measurement => measurement.Taken).HasColumnName("Taken");
+            builder.ToTable("Medicao");
+            builder.HasKey(measurement => measurement.Id);
+            builder.Property(bgthi => bgthi.Id).HasColumnName("Medicao_id");
+            builder.Property(measurement => measurement.TemperatureHumidityIndex).HasColumnName("ITU");
+            builder.Property(measurement => measurement.BlackGlobeTemperatureHumidityIndex).HasColumnName("ITGU");
+            builder.Property(measurement => measurement.BlackGlobeTemperature).HasColumnName("globo_negro_temperatura");
+            builder.Property(measurement => measurement.DewPointTemperature).HasColumnName("ponto_orvalho");
+            builder.Property(measurement => measurement.DryBulbTemperature).HasColumnName("bulbo_seco_temperatura");
+            builder.Property(measurement => measurement.Humidity).HasColumnName("Umidade");
+            builder.Property(measurement => measurement.WetBulbTemperature).HasColumnName("bulbo_umido_temperatura");
+            builder.Property(measurement => measurement.Taken).HasColumnName("Tirada_em");
             builder.HasOne(measurement => measurement.AnimalProduction).WithMany(production => production.Measurements);
         }
     }

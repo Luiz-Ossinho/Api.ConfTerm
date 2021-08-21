@@ -8,8 +8,10 @@ namespace Api.ConfTerm.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Species> builder)
         {
-            builder.ToTable("Especies");
-            builder.Property(species => species.Name).HasColumnName("nome_especie");
+            builder.ToTable("Especie");
+            builder.HasKey(species => species.Id);
+            builder.Property(bgthi => bgthi.Id).HasColumnName("especie_id");    
+            builder.Property(species => species.Name).HasColumnName("nome");
             builder.HasMany(species => species.AnimalProductions).WithOne(animalProduction => animalProduction.Species);
         }
     }
