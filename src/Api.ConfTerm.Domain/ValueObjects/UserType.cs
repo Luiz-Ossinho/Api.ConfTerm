@@ -10,7 +10,6 @@ namespace Api.ConfTerm.Domain.ValueObjects
         public static ICollection<UserType> ValidRoles { get; } = new List<UserType> { Administrator, Normal };
         public string Name { get; private set; }
         public int Id { get; private set; }
-        public static bool IsValid(UserType role) => ValidRoles.Contains(role);
         public static UserType GetValid(int id) => ValidRoles.SingleOrDefault(r => r.Id == id);
     }
 }
