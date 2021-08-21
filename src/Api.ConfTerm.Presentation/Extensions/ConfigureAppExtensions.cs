@@ -23,6 +23,8 @@ namespace Api.ConfTerm.Presentation.Extensions
         {
             var hashingSerivce = scope.ServiceProvider.GetService<IHashingService>();
             var context = scope.ServiceProvider.GetService<MeasurementContext>();
+
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             var superUser = setupInformation.Configuration.GetSection(nameof(Superuser)).Get<Superuser>();
@@ -48,7 +50,8 @@ namespace Api.ConfTerm.Presentation.Extensions
                 user.Housings.Add(housing);
 
                 var now = DateTime.Now;
-                var animalProduction = new AnimalProduction {
+                var animalProduction = new AnimalProduction
+                {
                     Housing = housing,
                     Birthday = now,
                     Equipament = "Prototipo de Teste",
@@ -63,7 +66,8 @@ namespace Api.ConfTerm.Presentation.Extensions
             context.SaveChanges();
         }
 
-        public static IApplicationBuilder ConfigureExceptions(this IApplicationBuilder app, SetupInformationContext setupInformation) {
+        public static IApplicationBuilder ConfigureExceptions(this IApplicationBuilder app, SetupInformationContext setupInformation)
+        {
             if (setupInformation.Environment.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else

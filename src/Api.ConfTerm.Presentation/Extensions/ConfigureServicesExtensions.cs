@@ -26,11 +26,14 @@ namespace Api.ConfTerm.Presentation.Extensions
         {
             if (setupInformation.Environment.IsDevelopment())
             {
-                // Database.db
+                //var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = "Database.db", Cache = SqliteCacheMode.Default };
                 var connectionStringBuilder = new SqliteConnectionStringBuilder { DataSource = ":memory:", Cache = SqliteCacheMode.Shared };
                 var sqliteConnection = new SqliteConnection(connectionStringBuilder.ToString());
                 sqliteConnection.Open();
-                return services.AddDbContext<MeasurementContext>(opt => opt.UseSqlite(sqliteConnection));
+                return services.AddDbContext<MeasurementContext>(opt =>
+                {
+                    opt.UseSqlite(sqliteConnection);
+                });
             }
 
             var databaseUrl = setupInformation.EnviromentVariableReader.DatabaseUrl;
@@ -47,15 +50,17 @@ namespace Api.ConfTerm.Presentation.Extensions
                 .AddScoped<IRepository<Housing>, GenericRepository<Housing>>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IRepository<Species>, GenericRepository<Species>>()
+                .AddScoped<IRepository<BlackGlobeTemparuteHumidityIndexConfort>, GenericRepository<BlackGlobeTemparuteHumidityIndexConfort>>()
+                .AddScoped<IRepository<TemperatureHumidityConfort>, GenericRepository<TemperatureHumidityConfort>>()
+                .AddScoped<IRepository<TemperatureHumidityIndexConfort>, GenericRepository<TemperatureHumidityIndexConfort>>()
                 ;
             return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services, SetupInformationContext setupInformation)
         {
-            services.AddScoped<IUnitOfWork, MeasurementContext>()
-                .AddScoped<IHashingService, HashingService>()
-                ;
+            services.AddScoped<IHashingService, HashingService>();
+            services.AddScoped(sp => sp.GetRequiredService<MeasurementContext>() as IUnitOfWork);
             return services;
         }
 
@@ -67,9 +72,9 @@ namespace Api.ConfTerm.Presentation.Extensions
                 .AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
                 .AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
                 .AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
-                //.AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
-                //.AddScoped<IInsertBGTHIConfortUseCase, InsertBGTHIConfortUseCase>()
-                //.AddScoped<IInsertTemperatureHumidityConfortUseCase, InsertTemperatureHumidityConfortUseCase>()
+                .AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
+                .AddScoped<IInsertBGTHIConfortUseCase, InsertBGTHIConfortUseCase>()
+                .AddScoped<IInsertTemperatureHumidityConfortUseCase, InsertTemperatureHumidityConfortUseCase>()
                 //.AddScoped<IRemoveTHIConfortUseCase, RemoveTHIConfortUseCase>()
                 //.AddScoped<IRemoveBGTHIConfortUseCase, RemoveBGTHIConfortUseCase>()
                 //.AddScoped<IRemoveTemperatureHumidityConfortUseCase, RemoveTemperatureHumidityConfortUseCase>()
