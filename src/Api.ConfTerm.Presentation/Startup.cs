@@ -1,4 +1,5 @@
 using Api.ConfTerm.Application.Services;
+using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Presentation.Extensions;
 using Api.ConfTerm.Presentation.Objects;
 using Microsoft.AspNetCore.Builder;
@@ -25,10 +26,11 @@ namespace Api.ConfTerm.Presentation
 
             services.AddDatabases(SetupInformationContext)
                 .AddJwtAuthetication(SetupInformationContext)
-                .AddUserInfoInjection()
-                .AddRepositories(SetupInformationContext)
-                .AddServices(SetupInformationContext)
-                .AddUseCases(SetupInformationContext);
+                .AddSwagger()
+                .AddAppplicationInfoInjection()
+                .AddRepositories()
+                .AddServices()
+                .AddUseCases();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +39,7 @@ namespace Api.ConfTerm.Presentation
             using var scope = app.ApplicationServices.CreateScope();
 
             ConfigureAppExtensions.EnsureSeed(SetupInformationContext, scope);
+            app.AddSwagger(SetupInformationContext, scope);
 
             app.ConfigureExceptions(SetupInformationContext);
 

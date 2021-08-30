@@ -17,6 +17,9 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Api.ConfTerm.Presentation.Extensions
 {
@@ -43,7 +46,7 @@ namespace Api.ConfTerm.Presentation.Extensions
         }
 
 
-        public static IServiceCollection AddRepositories(this IServiceCollection services, SetupInformationContext setupInformation)
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IRepository<Measurement>, GenericRepository<Measurement>>()
                 .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>()
@@ -57,14 +60,14 @@ namespace Api.ConfTerm.Presentation.Extensions
             return services;
         }
 
-        public static IServiceCollection AddServices(this IServiceCollection services, SetupInformationContext setupInformation)
+        public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IHashingService, HashingService>();
             services.AddScoped(sp => sp.GetRequiredService<MeasurementContext>() as IUnitOfWork);
             return services;
         }
 
-        public static IServiceCollection AddUseCases(this IServiceCollection services, SetupInformationContext setupInformation)
+        public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
             services.AddScoped<IPerformLoginUseCase, PerformLoginUseCase>()
                 .AddScoped<IInsertUserUseCase, InsertUserUseCase>()
@@ -86,8 +89,32 @@ namespace Api.ConfTerm.Presentation.Extensions
             return services;
         }
 
-        public static IServiceCollection AddUserInfoInjection(this IServiceCollection services)
+        public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
+            services.AddSwaggerGen(opt =>
+                opt.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API Conf-Term",
+                    Description = "ASP.NET Core Web API para armazenar dados de conforto termico no estado de Sergipe",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Luiz Eduardo de Jesus Santana",
+                        Email = string.Empty,
+                        Url = new Uri("https://www.linkedin.com/in/luiz-eduardo-7246061ba/"),
+                    }
+                }));
+            return services;
+        }
+
+        public static IServiceCollection AddAppplicationInfoInjection(this IServiceCollection services)
+        {
+            services.AddSingleton<IEnviromentVariableReader, EnviromentVariableReader>();
+            services.AddSingleton(sp => new SetupInformationContext(
+                sp.GetRequiredService<IConfiguration>(),
+                sp.GetRequiredService<IWebHostEnvironment>(),
+                sp.GetRequiredService<IEnviromentVariableReader>()
+            ));
             services.AddHttpContextAccessor();
             services.AddScoped(sp => new UserInfoService(sp.GetRequiredService<IHttpContextAccessor>()) as IUserInfoService);
             return services;

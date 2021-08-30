@@ -19,12 +19,25 @@ namespace Api.ConfTerm.Presentation.Extensions
             public string Username { get; set; }
             public string Password { get; set; }
         };
+
+        public static void AddSwagger(this IApplicationBuilder app, SetupInformationContext setupInformation, IServiceScope scope)
+        {
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "API Conf-Term");
+                c.RoutePrefix = "api/swagger";
+            });
+        }
+
         public static void EnsureSeed(SetupInformationContext setupInformation, IServiceScope scope)
         {
             var hashingSerivce = scope.ServiceProvider.GetService<IHashingService>();
             var context = scope.ServiceProvider.GetService<MeasurementContext>();
 
-            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             var superUser = setupInformation.Configuration.GetSection(nameof(Superuser)).Get<Superuser>();
