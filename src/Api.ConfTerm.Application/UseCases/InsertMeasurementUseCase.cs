@@ -33,7 +33,7 @@ namespace Api.ConfTerm.Application.UseCases
                 return response;
 
             var measurement = data.ToMeasurement();
-            measurement.AnimalProduction = animalProduction;
+            measurement.Production = animalProduction;
             await _measurementRepository.InsertAsync(measurement);
             await _unitOfWork.SaveChangesAsync();
 

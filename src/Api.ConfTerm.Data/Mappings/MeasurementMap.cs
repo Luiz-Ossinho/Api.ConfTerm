@@ -19,7 +19,7 @@ namespace Api.ConfTerm.Data.Mappings
             builder.Property(measurement => measurement.Humidity).HasColumnName("Umidade");
             builder.Property(measurement => measurement.WetBulbTemperature).HasColumnName("bulbo_umido_temperatura");
             builder.Property(measurement => measurement.Taken).HasColumnName("Tirada_em");
-            builder.HasOne(measurement => measurement.AnimalProduction).WithMany(production => production.Measurements);
+            builder.HasOne(measurement => measurement.Production).WithMany(production => production.Measurements);
         }
     }
 }

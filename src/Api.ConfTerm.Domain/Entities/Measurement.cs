@@ -5,7 +5,7 @@ namespace Api.ConfTerm.Domain.Entities
 {
     public class Measurement : IdentifiableEntity
     {
-        public AnimalProduction AnimalProduction { get; set; }
+        public AnimalProduction Production { get; set; }
         public float DryBulbTemperature { get; set; }
         public float WetBulbTemperature { get; set; }
         public float BlackGlobeTemperature { get; set; }

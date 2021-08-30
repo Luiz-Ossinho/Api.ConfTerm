@@ -12,10 +12,10 @@ namespace Api.ConfTerm.Data.Mappings
             builder.ToTable("Conforto_Temperatura_Umidade");
             builder.HasKey(th => th.Id);
             builder.Property(bgthi => bgthi.Id).HasColumnName("Conforto_Temperatura_Umidade_id");
-            builder.Property(th => th.MinimunHumidity).HasColumnType("umidade_minima");
-            builder.Property(th => th.MaximunHumidity).HasColumnType("umidade_maxima");
-            builder.Property(th => th.MinimunTemperature).HasColumnType("temperatura_minima");
-            builder.Property(th => th.MaximunTemperature).HasColumnType("temperatura_maxima");
+            builder.Property(th => th.MinimunHumidity).HasColumnName("umidade_minima");
+            builder.Property(th => th.MaximunHumidity).HasColumnName("umidade_maxima");
+            builder.Property(th => th.MinimunTemperature).HasColumnName("temperatura_minima");
+            builder.Property(th => th.MaximunTemperature).HasColumnName("temperatura_maxima");
             builder.HasOne(th => th.Species).WithMany(species => species.TemperatureHumidityConforts);
         }
     }

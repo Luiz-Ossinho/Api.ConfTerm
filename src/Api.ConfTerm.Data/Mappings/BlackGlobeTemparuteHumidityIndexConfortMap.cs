@@ -12,8 +12,8 @@ namespace Api.ConfTerm.Data.Mappings
             builder.ToTable("Conforto_ITGU");
             builder.HasKey(bgthi => bgthi.Id);
             builder.Property(bgthi => bgthi.Id).HasColumnName("Conforto_ITGU_id");
-            builder.Property(bgthi => bgthi.MinimunBlackGlobeTemperatureHumidityIndex).HasColumnType("itgu_minimo");
-            builder.Property(bgthi => bgthi.MaximunBlackGlobeTemperatureHumidityIndex).HasColumnType("itgu_maximo");
+            builder.Property(bgthi => bgthi.MinimunBlackGlobeTemperatureHumidityIndex).HasColumnName("itgu_minimo");
+            builder.Property(bgthi => bgthi.MaximunBlackGlobeTemperatureHumidityIndex).HasColumnName("itgu_maximo");
             builder.HasOne(bgthi => bgthi.Species).WithMany(species => species.BlackGlobeTemparuteHumidityIndexConforts);
         }
     }
