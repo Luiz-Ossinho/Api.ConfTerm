@@ -14,8 +14,9 @@ namespace Api.ConfTerm.Presentation.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromServices] SetupInformationContext setupInformation)
         {
+            ViewBag.DatabaseUrl = setupInformation.EnviromentVariableReader.DatabaseUrl;
             return View();
         }
 
