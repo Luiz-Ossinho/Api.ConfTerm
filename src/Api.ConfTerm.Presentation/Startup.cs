@@ -13,10 +13,9 @@ namespace Api.ConfTerm.Presentation
     {
         private readonly SetupInformationContext SetupInformationContext;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        public Startup(SetupInformationContext setupInformationContext)
         {
-            var enviromentVariableReader = new EnviromentVariableReader();
-            SetupInformationContext = new SetupInformationContext(configuration, environment, enviromentVariableReader);
+            SetupInformationContext = setupInformationContext;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

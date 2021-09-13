@@ -1,3 +1,5 @@
+using Api.ConfTerm.Application.Services;
+using Api.ConfTerm.Presentation.Objects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -14,7 +16,12 @@ namespace Api.ConfTerm.Presentation
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup(builder =>
+                    {
+                        var enviromentVariableReader = new EnviromentVariableReader();
+                        var startupContext = new SetupInformationContext(builder.Configuration, builder.HostingEnvironment, enviromentVariableReader);
+                        return new Startup(startupContext);
+                    });
                 });
     }
 }
