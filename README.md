@@ -1,10 +1,10 @@
 # CONF-TERM
 
-Api REST criada para dar suporte a um modulo web para sistema um sistema embarcado com determinação de índices de conforto térmico.
-Vai ser usado no meu projeto de TCC, onde vai se acumular um banco de dados de indices de conforto termicos e emitir relatorios para produtores do nordeste.
-Usa SQLite InMemmory quando rodando localmente.
-Nao aplica migrations ainda, optando por usar EnsureCreated.
-Tem swagger e [instalacao no heroku](https://conf-term.herokuapp.com).
+Api REST criada para dar suporte a um modulo web para sistema um sistema embarcado com determinação de índices de conforto térmico.   
+Vai ser usado no meu projeto de TCC, onde vai se acumular um banco de dados de indices de conforto termicos e emitir relatorios para produtores do nordeste.   
+Usa SQLite InMemmory quando rodando localmente.   
+Nao aplica migrations ainda, optando por usar EnsureCreated.   
+Tem swagger e [instalacao no heroku](https://conf-term.herokuapp.com).   
 
 # Board de contribuicao.
 Alem dos pontos comentados, qualquer contribuicao ou discussao é bem vinda.
