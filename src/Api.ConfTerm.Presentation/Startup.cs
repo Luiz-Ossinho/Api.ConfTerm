@@ -2,6 +2,7 @@ using Api.ConfTerm.Application.Services;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Presentation.Extensions;
 using Api.ConfTerm.Presentation.Objects;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
