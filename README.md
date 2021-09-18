@@ -23,5 +23,5 @@ Alem dos pontos comentados, qualquer contribuicao ou discussao é bem vinda.
 * Criar endpoints GET antes de comecar integracao com front end
 
 ## DONE
-* Checar implementacao do Handler Pattern (alteracoes na [branch](https://github.com/Luiz-Ossinho/Api.ConfTerm/tree/feature/))
+* Checar implementacao do Handler Pattern (alteracoes na [branch](https://github.com/Luiz-Ossinho/Api.ConfTerm/tree/feature/2.0.0%2FMediatR))
 	* MediatR implementado.
