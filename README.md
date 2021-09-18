@@ -20,6 +20,8 @@ Alem dos pontos comentados, qualquer contribuicao ou discussao é bem vinda.
 ## IN PROGRESS
 * Solucao para validacao de erros e controle de fluxo nos Handlers (UseCase)
 	* Foi avaliado que maior separacao em metodos e uso de FluentValidation para gerar erros é o suficiente
-* Checar implementacao do Handler Pattern
-	* MediatR iria diminuir parametros nos endpoints.
 * Criar endpoints GET antes de comecar integracao com front end
+
+## DONE
+* Checar implementacao do Handler Pattern (alteracoes na [branch](https://github.com/Luiz-Ossinho/Api.ConfTerm/tree/feature/))
+	* MediatR implementado.
