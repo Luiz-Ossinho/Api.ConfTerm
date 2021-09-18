@@ -15,6 +15,7 @@ Alem dos pontos comentados, qualquer contribuicao ou discussao é bem vinda.
 * Opiniao sobre Startup
 	* Juntando varios objetos de configuracao em um so, armengue ou legal?
 	* Criacao de um scope no configure, tem alternativas?
+* Testes precisam ser levantados
 
 ## IN PROGRESS
 * Solucao para validacao de erros e controle de fluxo nos Handlers (UseCase)
