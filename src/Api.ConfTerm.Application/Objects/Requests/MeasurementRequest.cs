@@ -1,10 +1,11 @@
-﻿using Api.ConfTerm.Domain.Entities;
+﻿using Api.ConfTerm.Application.Abstract;
+using Api.ConfTerm.Domain.Entities;
 using System;
 
 namespace Api.ConfTerm.Application.Objects.Requests
 {
     public record MeasurementRequest(int AnimalProductionId, DateTime MeasurementDateTime, float TemperatureHumidityIndex, float BlackGlobeHumidityIndex,
-        float DewPointTemperature, float DryBulbTemperature, float WetBulbTemperature, float Humidity, float BlackGlobeTemperature)
+        float DewPointTemperature, float DryBulbTemperature, float WetBulbTemperature, float Humidity, float BlackGlobeTemperature) : ApplicationRequest
     {
         public Measurement ToMeasurement()
             => new()

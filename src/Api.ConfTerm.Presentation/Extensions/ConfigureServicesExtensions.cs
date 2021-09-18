@@ -1,6 +1,4 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
-using Api.ConfTerm.Application.Services;
-using Api.ConfTerm.Application.UseCases;
+﻿using Api.ConfTerm.Application.Services;
 using Api.ConfTerm.Data.Contexts;
 using Api.ConfTerm.Data.Repositories;
 using Api.ConfTerm.Domain.Entities;
@@ -20,6 +18,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using MediatR;
+using Api.ConfTerm.Application.Abstract;
 
 namespace Api.ConfTerm.Presentation.Extensions
 {
@@ -48,14 +48,14 @@ namespace Api.ConfTerm.Presentation.Extensions
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<Measurement>, GenericRepository<Measurement>>()
-                .AddScoped<IRepository<AnimalProduction>, GenericRepository<AnimalProduction>>()
-                .AddScoped<IRepository<Housing>, GenericRepository<Housing>>()
+            services.AddScoped<IRepository<Measurement>, Repository<Measurement>>()
+                .AddScoped<IRepository<AnimalProduction>, Repository<AnimalProduction>>()
+                .AddScoped<IRepository<Housing>, Repository<Housing>>()
                 .AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<IRepository<Species>, GenericRepository<Species>>()
-                .AddScoped<IRepository<BlackGlobeTemparuteHumidityIndexConfort>, GenericRepository<BlackGlobeTemparuteHumidityIndexConfort>>()
-                .AddScoped<IRepository<TemperatureHumidityConfort>, GenericRepository<TemperatureHumidityConfort>>()
-                .AddScoped<IRepository<TemperatureHumidityIndexConfort>, GenericRepository<TemperatureHumidityIndexConfort>>()
+                .AddScoped<IRepository<Species>, Repository<Species>>()
+                .AddScoped<IRepository<BlackGlobeTemparuteHumidityIndexConfort>, Repository<BlackGlobeTemparuteHumidityIndexConfort>>()
+                .AddScoped<IRepository<TemperatureHumidityConfort>, Repository<TemperatureHumidityConfort>>()
+                .AddScoped<IRepository<TemperatureHumidityIndexConfort>, Repository<TemperatureHumidityIndexConfort>>()
                 ;
             return services;
         }
@@ -69,24 +69,7 @@ namespace Api.ConfTerm.Presentation.Extensions
 
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
-            services.AddScoped<IPerformLoginUseCase, PerformLoginUseCase>()
-                .AddScoped<IInsertUserUseCase, InsertUserUseCase>()
-                .AddScoped<IInsertHousingUseCase, InsertHousingUseCase>()
-                .AddScoped<IInsertAnimalProductionUseCase, InsertAnimalProductionUseCase>()
-                .AddScoped<IInsertMeasurementUseCase, InsertMeasurementUseCase>()
-                .AddScoped<IInsertSpeciesUseCase, InsertSpeciesUseCase>()
-                .AddScoped<IInsertTHIConfortUseCase, InsertTHIConfortUseCase>()
-                .AddScoped<IInsertBGTHIConfortUseCase, InsertBGTHIConfortUseCase>()
-                .AddScoped<IInsertTemperatureHumidityConfortUseCase, InsertTemperatureHumidityConfortUseCase>()
-                //.AddScoped<IRemoveTHIConfortUseCase, RemoveTHIConfortUseCase>()
-                //.AddScoped<IRemoveBGTHIConfortUseCase, RemoveBGTHIConfortUseCase>()
-                //.AddScoped<IRemoveTemperatureHumidityConfortUseCase, RemoveTemperatureHumidityConfortUseCase>()
-                //.AddScoped<IEditTHIConfortUseCase, EditTHIConfortUseCase>()
-                //.AddScoped<IEditBGTHIConfortUseCase, EditBGTHIConfortUseCase>()
-                //.AddScoped<IEditTemperatureHumidityConfortUseCase, EditTemperatureHumidityConfortUseCase>()
-                //.AddScoped<IViewReportUseCase, ViewReportUseCase>()
-                ;
-            return services;
+            return services.AddMediatR(typeof(IUseCase<>));
         }
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)

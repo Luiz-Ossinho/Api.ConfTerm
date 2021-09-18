@@ -1,15 +1,16 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
+﻿using Api.ConfTerm.Application.Abstract;
 using Api.ConfTerm.Application.Objects;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertMeasurementUseCase : IInsertMeasurementUseCase
+    public class InsertMeasurementUseCase : IUseCase<MeasurementRequest>
     {
         private readonly IRepository<Measurement> _measurementRepository;
         private readonly IRepository<AnimalProduction> _animalProductionRepository;
@@ -21,23 +22,29 @@ namespace Api.ConfTerm.Application.UseCases
             _measurementRepository = measurementRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApplicationResponse> HandleAsync(MeasurementRequest data)
+
+        public async Task<ApplicationResponse> Handle(MeasurementRequest request, CancellationToken cancelletionToken = default)
         {
             var response = ApplicationResponse.OfNone();
 
-            var animalProduction = await _animalProductionRepository.GetByIdAsync(data.AnimalProductionId);
+            var animalProduction = await _animalProductionRepository.GetByIdAsync(request.AnimalProductionId, cancelletionToken);
 
             response.CheckFor(animalProduction != null, ApplicationError.WasNullForArgument("Animal Production", "Animal Production Id"));
-            
+
             if (!response.Success)
                 return response;
 
-            var measurement = data.ToMeasurement();
-            measurement.Production = animalProduction;
-            await _measurementRepository.InsertAsync(measurement);
-            await _unitOfWork.SaveChangesAsync();
+            await PersistMeasurement(request, animalProduction, cancelletionToken);
 
             return response.WithCode(HttpStatusCode.Created);
+        }
+
+        private async Task PersistMeasurement(MeasurementRequest request, AnimalProduction animalProduction, CancellationToken cancelletionToken)
+        {
+            var measurement = request.ToMeasurement();
+            measurement.Production = animalProduction;
+            await _measurementRepository.InsertAsync(measurement, cancelletionToken);
+            await _unitOfWork.SaveChangesAsync(cancelletionToken);
         }
     }
 }

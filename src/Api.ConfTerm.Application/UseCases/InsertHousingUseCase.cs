@@ -1,4 +1,4 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
+﻿using Api.ConfTerm.Application.Abstract;
 using Api.ConfTerm.Application.Objects;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
@@ -6,11 +6,12 @@ using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Domain.ValueObjects;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertHousingUseCase : IInsertHousingUseCase
+    public class InsertHousingUseCase : IUseCase<InsertHousingRequest>
     {
         private readonly IUserRepository _userRepository;
         private readonly IRepository<Housing> _housingRepository;
@@ -21,31 +22,40 @@ namespace Api.ConfTerm.Application.UseCases
             _housingRepository = housingRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApplicationResponse> HandleAsync(InsertHousingRequest data)
+
+        public async Task<ApplicationResponse> Handle(InsertHousingRequest request, CancellationToken cancellationToken = default)
         {
             var response = ApplicationResponse.OfNone();
 
-            response.CheckFor(!string.IsNullOrEmpty(data.Identificantion), ApplicationError.ArgumentWasInvalid(nameof(data.Identificantion)))
-                .CheckFor(Email.IsValid(data.UserMail), ApplicationError.ArgumentWasInvalid(nameof(data.UserMail)));
+            response.CheckFor(!string.IsNullOrEmpty(request.Identificantion), ApplicationError.ArgumentWasInvalid(nameof(request.Identificantion)))
+                .CheckFor(Email.IsValid(request.UserMail), ApplicationError.ArgumentWasInvalid(nameof(request.UserMail)));
 
             if (!response.Success)
                 return response;
 
-            var user = await _userRepository.GetByEmailAsync(data.UserMail);
+            var user = await _userRepository.GetByEmailAsync(request.UserMail, cancellationToken);
 
             if (user == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(data.UserMail)));
+                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.UserMail)));
 
+            int housingId = await PersistHousing(request, user, cancellationToken);
+
+            return response.WithCode(HttpStatusCode.Created).WithData(new { HousingId = housingId });
+        }
+
+        private async Task<int> PersistHousing(InsertHousingRequest request, User user, CancellationToken cancellationToken)
+        {
             var hosuing = new Housing
             {
-                Identification = data.Identificantion,
+                Identification = request.Identificantion,
                 Owner = user
             };
 
-            await _housingRepository.InsertAsync(hosuing);
-            await _unitOfWork.SaveChangesAsync();
+            await _housingRepository.InsertAsync(hosuing, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created).WithData(new { HousingId = hosuing.Id });
+            var housingId = hosuing.Id;
+            return housingId;
         }
     }
 }
