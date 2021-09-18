@@ -10,13 +10,15 @@ Tem swagger e [instalacao no heroku](https://conf-term.herokuapp.com).
 Alem dos pontos comentados, qualquer contribuicao ou discussao é bem vinda.
 
 ## TODO
-* Checar implementacao do Handler Pattern
-	* Falta utilizar a blibioteca do MediatoR.
-* Solucao para validacao de erros e controle de fluxo nos Handlers (UseCase)
-	* Nao esta muito legal, enquanto uma parte poderia ser resolvida com FluentValidation, queria evitar de ter IFs para controlar o fluxo no Handle(Request)
 * Opniao sobre globalizacao
 	* Vendo como o codigo ja esta baguncado nesse sentido, acho que vou preferir deixar tudo em ingles no codigo e nem implementar globalizacao pelo tutorial da microsoft
 * Opiniao sobre Startup
 	* Juntando varios objetos de configuracao em um so, armengue ou legal?
 	* Criacao de um scope no configure, tem alternativas?
+
+## IN PROGRESS
+* Solucao para validacao de erros e controle de fluxo nos Handlers (UseCase)
+	* Foi avaliado que maior separacao em metodos e uso de FluentValidation para gerar erros é o suficiente
+* Checar implementacao do Handler Pattern
+	* MediatoR iria diminuir parametros nos endpoints.
 * Criar endpoints GET antes de comecar integracao com front end
