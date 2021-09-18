@@ -1,15 +1,16 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
+﻿using Api.ConfTerm.Application.Abstract;
 using Api.ConfTerm.Application.Objects;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertSpeciesUseCase : IInsertSpeciesUseCase
+    public class InsertSpeciesUseCase : IUseCase<InsertSpeciesRequest>
     {
         private readonly IRepository<Species> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -18,22 +19,30 @@ namespace Api.ConfTerm.Application.UseCases
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApplicationResponse> HandleAsync(InsertSpeciesRequest data)
+
+        public async Task<ApplicationResponse> Handle(InsertSpeciesRequest request, CancellationToken cancelletionToken = default)
         {
             var response = ApplicationResponse.OfNone();
 
-            if (string.IsNullOrWhiteSpace(data.Name))
-                return response.BadRequest().WithError(ApplicationError.ArgumentWasInvalid(nameof(data.Name)));
+            if (string.IsNullOrWhiteSpace(request.Name))
+                return response.BadRequest().WithError(ApplicationError.ArgumentWasInvalid(nameof(request.Name)));
 
+            var speciesId = await PersistSpecies(request, cancelletionToken);
+
+            return response.WithCode(HttpStatusCode.Created).WithData(new { SpeciesId = speciesId });
+        }
+
+        private async Task<int> PersistSpecies(InsertSpeciesRequest request, CancellationToken cancelletionToken)
+        {
             var species = new Species
             {
-                Name = data.Name
+                Name = request.Name
             };
 
-            await _repository.InsertAsync(species);
-            await _unitOfWork.SaveChangesAsync();
+            await _repository.InsertAsync(species, cancelletionToken);
+            await _unitOfWork.SaveChangesAsync(cancelletionToken);
 
-            return response.WithCode(HttpStatusCode.Created).WithData(new { SpeciesId = species.Id });
+            return species.Id;
         }
     }
 }

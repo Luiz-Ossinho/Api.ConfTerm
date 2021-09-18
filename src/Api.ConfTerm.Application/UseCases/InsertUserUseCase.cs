@@ -1,4 +1,4 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
+﻿using Api.ConfTerm.Application.Abstract;
 using Api.ConfTerm.Application.Objects;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
@@ -6,11 +6,12 @@ using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Domain.ValueObjects;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertUserUseCase : IInsertUserUseCase
+    public class InsertUserUseCase : IUseCase<InsertUserRequest>
     {
         private readonly IUserRepository _repository;
         private readonly IHashingService _hashingService;
@@ -21,33 +22,39 @@ namespace Api.ConfTerm.Application.UseCases
             _hashingService = hashingService;
             _unitOfWork = unitOfWork;
         }
-        public async Task<ApplicationResponse> HandleAsync(InsertUserRequest data)
+
+        public async Task<ApplicationResponse> Handle(InsertUserRequest request, CancellationToken cancellationToken = default)
         {
             var response = ApplicationResponse.OfNone();
 
-            response.CheckFor(Email.IsValid(data.Email), ApplicationError.ArgumentWasInvalid(nameof(data.Email)))
-                .CheckFor(!string.IsNullOrEmpty(data.Password), ApplicationError.ArgumentWasInvalid(nameof(data.Password)))
-                .CheckFor(!string.IsNullOrEmpty(data.Name), ApplicationError.ArgumentWasInvalid(nameof(data.Name)));
+            response.CheckFor(Email.IsValid(request.Email), ApplicationError.ArgumentWasInvalid(nameof(request.Email)))
+                .CheckFor(!string.IsNullOrEmpty(request.Password), ApplicationError.ArgumentWasInvalid(nameof(request.Password)))
+                .CheckFor(!string.IsNullOrEmpty(request.Name), ApplicationError.ArgumentWasInvalid(nameof(request.Name)));
 
             if (!response.Success)
                 return response;
 
+            await PersistUser(request, cancellationToken);
+
+            return response.WithCode(HttpStatusCode.Created);
+        }
+
+        private async Task PersistUser(InsertUserRequest request, CancellationToken cancellationToken = default)
+        {
             var salt = _hashingService.GenerateSalt();
-            var password = _hashingService.GenerateHash(data.Password, salt);
+            var password = _hashingService.GenerateHash(request.Password, salt);
 
             var user = new User()
             {
-                Email = data.Email,
-                Name = data.Name,
-                Type = data.Type,
+                Email = request.Email,
+                Name = request.Name,
+                Type = request.Type,
                 Salt = salt,
                 Password = password
             };
 
-            await _repository.InsertAsync(user);
-            await _unitOfWork.SaveChangesAsync();
-
-            return response.WithCode(HttpStatusCode.Created);
+            await _repository.InsertAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

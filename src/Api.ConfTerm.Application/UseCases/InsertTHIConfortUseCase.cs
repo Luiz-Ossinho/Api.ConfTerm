@@ -1,15 +1,16 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
+﻿using Api.ConfTerm.Application.Abstract;
 using Api.ConfTerm.Application.Objects;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertTHIConfortUseCase : IInsertTHIConfortUseCase
+    public class InsertTHIConfortUseCase : IUseCase<InsertTHIConfortRequest>
     {
         private readonly IRepository<TemperatureHumidityIndexConfort> _thiRepository;
         private readonly IRepository<Species> _speciesRepository;
@@ -21,7 +22,8 @@ namespace Api.ConfTerm.Application.UseCases
             _unitOfWork = unitOfWork;
             _speciesRepository = speciesRepository;
         }
-        public async Task<ApplicationResponse> HandleAsync(InsertTHIConfortRequest data)
+
+        public async Task<ApplicationResponse> Handle(InsertTHIConfortRequest request, CancellationToken cancellationToken = default)
         {
             var response = ApplicationResponse.OfNone();
 
@@ -29,24 +31,30 @@ namespace Api.ConfTerm.Application.UseCases
             //response.CheckFor()
             //
 
-            var species = await _speciesRepository.GetByIdAsync(data.SpeciesId);
+            var species = await _speciesRepository.GetByIdAsync(request.SpeciesId, cancellationToken);
 
             if (species == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(data.SpeciesId)));
+                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.SpeciesId)));
 
-            var confort = new TemperatureHumidityIndexConfort
-            {
-                Level = data.Level,
-                MaximunAge = data.MaximunAge,
-                MinimunAge = data.MinimunAge,
-                MaximunTemperatureHumidityIndex = data.MaximunTHI,
-                MinimunTemperatureHumidityIndex = data.MinimunTHI,
-                Species = species
-            };
-            await _thiRepository.InsertAsync(confort);
-            await _unitOfWork.SaveChangesAsync();
+            await PersistTemperatureHumidityIndexConfort(request, species, cancellationToken);
 
             return response.WithCode(HttpStatusCode.Created);
+        }
+
+        private async Task PersistTemperatureHumidityIndexConfort(InsertTHIConfortRequest request, Species species, CancellationToken cancellationToken = default)
+        {
+            var confort = new TemperatureHumidityIndexConfort
+            {
+                Level = request.Level,
+                MaximunAge = request.MaximunAge,
+                MinimunAge = request.MinimunAge,
+                MaximunTemperatureHumidityIndex = request.MaximunTHI,
+                MinimunTemperatureHumidityIndex = request.MinimunTHI,
+                Species = species
+            };
+
+            await _thiRepository.InsertAsync(confort, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using Api.ConfTerm.Application.Abstract.UseCases;
+﻿using Api.ConfTerm.Application.Abstract;
 using Api.ConfTerm.Application.Objects;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
-using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertTemperatureHumidityConfortUseCase : IInsertTemperatureHumidityConfortUseCase
+    public class InsertTemperatureHumidityConfortUseCase : IUseCase<InsertTemperatureHumidityConfortRequest>
     {
         private readonly IRepository<TemperatureHumidityConfort> _thRepository;
         private readonly IRepository<Species> _speciesRepository;
@@ -22,7 +22,8 @@ namespace Api.ConfTerm.Application.UseCases
             _unitOfWork = unitOfWork;
             _speciesRepository = speciesRepository;
         }
-        public async Task<ApplicationResponse> HandleAsync(InsertTemperatureHumidityConfortRequest data)
+
+        public async Task<ApplicationResponse> Handle(InsertTemperatureHumidityConfortRequest request, CancellationToken cancellationToken = default)
         {
             var response = ApplicationResponse.OfNone();
 
@@ -30,11 +31,18 @@ namespace Api.ConfTerm.Application.UseCases
             //response.CheckFor()
             //
 
-            var species = await _speciesRepository.GetByIdAsync(data.SpeciesId);
+            var species = await _speciesRepository.GetByIdAsync(request.SpeciesId, cancellationToken);
 
             if (species == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(data.SpeciesId)));
+                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.SpeciesId)));
 
+            await PersistTemperatureHumidityConfort(request, species, cancellationToken);
+
+            return response.WithCode(HttpStatusCode.Created);
+        }
+
+        private async Task PersistTemperatureHumidityConfort(InsertTemperatureHumidityConfortRequest data, Species species, CancellationToken cancellationToken = default)
+        {
             var confort = new TemperatureHumidityConfort
             {
                 Level = data.Level,
@@ -46,10 +54,8 @@ namespace Api.ConfTerm.Application.UseCases
                 MaximunTemperature = data.MaximunTemperature,
                 MinimunTemperature = data.MinimunTemperature
             };
-            await _thRepository.InsertAsync(confort);
-            await _unitOfWork.SaveChangesAsync();
-
-            return response.WithCode(HttpStatusCode.Created);
+            await _thRepository.InsertAsync(confort, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }
