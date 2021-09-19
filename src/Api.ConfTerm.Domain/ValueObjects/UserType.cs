@@ -11,5 +11,6 @@ namespace Api.ConfTerm.Domain.ValueObjects
         public string Name { get; private set; }
         public int Id { get; private set; }
         public static UserType GetValid(int id) => ValidRoles.SingleOrDefault(r => r.Id == id);
+        public static UserType GetValid(string name) => ValidRoles.SingleOrDefault(r => r.Name == name);
     }
 }
