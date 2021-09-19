@@ -1,16 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Api.ConfTerm.Application.Objects
 {
     public class ApplicationResponse
     {
-        public readonly List<ApplicationError> Errors = new();
-
         public bool Success { get; set; }
         public HttpStatusCode StatusCode { get; set; }
+
+        [JsonIgnore]
+        protected ICollection<ApplicationError> Errors { get; init; } = new LinkedList<ApplicationError>();
+
+        [JsonPropertyName("Errors")]
+        public IEnumerable<string> ErrorsValues { get => Errors.Select(e => e.Value); }
+
+        public ApplicationResponse WithBadRequest(params ApplicationError[] applicationErrors)
+        {
+            foreach (var error in applicationErrors)
+                WithError(error);
+
+            Success = false;
+            StatusCode = HttpStatusCode.BadRequest;
+            return this;
+        }
+
+        public ApplicationResponse WithNotFound(params ApplicationError[] applicationErrors)
+        {
+            foreach (var error in applicationErrors)
+                WithError(error);
+
+            Success = false;
+            StatusCode = HttpStatusCode.NotFound;
+            return this;
+        }
+
+        public ApplicationResponse WithCreated()
+        {
+            Success = true;
+            StatusCode = HttpStatusCode.Created;
+            return this;
+        }
+
+        public ApplicationResponse<T> WithCreated<T>(T data)
+        {
+            Success = true;
+            StatusCode = HttpStatusCode.Created;
+            return WithData(data);
+        }
 
         public ApplicationResponse WithCode(HttpStatusCode httpStatusCode)
         {
@@ -32,46 +70,11 @@ namespace Api.ConfTerm.Application.Objects
                 StatusCode = StatusCode
             };
 
-        public virtual object ToJsonObject()
-        {
-            if (!Errors.Any())
-                return new { Code = (int)StatusCode, Success };
-            return new { Code = (int)StatusCode, Success, Errors = Errors.Select(err => err.Value) };
-        }
-
-        public ApplicationResponse BadRequest()
-        {
-            Success = false;
-            StatusCode = HttpStatusCode.BadRequest;
-            return this;
-        }
-
-        public ApplicationResponse CheckForArgument<TRequest>(TRequest request, Func<TRequest, bool> predicate, ApplicationError applicationError)
-        {
-            var predicateResult = predicate.Invoke(request);
-            if (!predicateResult)
-                BadRequest().WithError(applicationError);
-
-            return this;
-        }
-        public ApplicationResponse CheckFor(bool succsess, ApplicationError applicationError)
-        {
-            if (!succsess)
-                BadRequest().WithError(applicationError);
-            return this;
-        }
-
         public static ApplicationResponse<T> Of<T>(T data) => new() { Data = data, StatusCode = HttpStatusCode.OK, Success = true };
-        public static ApplicationResponse OfNone() => new() { StatusCode = HttpStatusCode.OK, Success = true };
+        public static ApplicationResponse OfOk() => new() { StatusCode = HttpStatusCode.OK, Success = true };
     }
     public class ApplicationResponse<T> : ApplicationResponse
     {
         public T Data { get; set; }
-        public override object ToJsonObject()
-        {
-            if (!Errors.Any())
-                return new { Code = (int)StatusCode, Success, Data };
-            return new { Code = (int)StatusCode, Success, Data, Errors = Errors.Select(err => err.Value) };
-        }
     }
 }
