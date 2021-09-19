@@ -1,5 +1,5 @@
-﻿using Api.ConfTerm.Application.Abstract;
-using Api.ConfTerm.Application.Objects;
+﻿using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Abstract;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;

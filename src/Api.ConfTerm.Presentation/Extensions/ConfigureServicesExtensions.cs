@@ -19,7 +19,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using MediatR;
-using Api.ConfTerm.Application.Abstract;
+using Api.ConfTerm.Application.Objects.Abstract;
 
 namespace Api.ConfTerm.Presentation.Extensions
 {
