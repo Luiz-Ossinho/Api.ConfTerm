@@ -4,7 +4,6 @@ using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,20 +24,16 @@ namespace Api.ConfTerm.Application.UseCases
 
         public async Task<ApplicationResponse> Handle(InsertTemperatureHumidityConfortRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            // TODO aplicar validacoes
-            //response.CheckFor()
-            //
+            var response = ApplicationResponse.OfOk();
 
             var species = await _speciesRepository.GetByIdAsync(request.SpeciesId, cancellationToken);
 
-            if (species == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.SpeciesId)));
+            if (species == default)
+                return response.WithNotFound(ApplicationError.OfNotFound(nameof(species)));
 
             await PersistTemperatureHumidityConfort(request, species, cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created);
+            return response.WithCreated();
         }
 
         private async Task PersistTemperatureHumidityConfort(InsertTemperatureHumidityConfortRequest data, Species species, CancellationToken cancellationToken = default)

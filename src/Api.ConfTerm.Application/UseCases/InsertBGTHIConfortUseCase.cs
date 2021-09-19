@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertBGTHIConfortUseCase : IUseCase<InsertBGTHIConfortRequest>
+    public class InsertBGTHIConfortUseCase : IUseCase<InsertBlackGlobeTemparuteHumidityIndexConfortRequest>
     {
         private readonly IRepository<BlackGlobeTemparuteHumidityIndexConfort> _bgthiRepository;
         private readonly IRepository<Species> _speciesRepository;
@@ -24,25 +24,21 @@ namespace Api.ConfTerm.Application.UseCases
             _speciesRepository = speciesRepository;
         }
 
-        public async Task<ApplicationResponse> Handle(InsertBGTHIConfortRequest request, CancellationToken cancellationToken = default)
+        public async Task<ApplicationResponse> Handle(InsertBlackGlobeTemparuteHumidityIndexConfortRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            // TODO aplicar validacoes
-            //response.CheckFor()
-            //
+            var response = ApplicationResponse.OfOk();
 
             var species = await _speciesRepository.GetByIdAsync(request.SpeciesId, cancellationToken);
 
-            if (species == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.SpeciesId)));
+            if (species == default)
+                return response.WithNotFound(ApplicationError.OfNotFound(nameof(species)));
 
             await PersistBlackGlobeTemperatureHumidityIndexConfort(request, species, cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created);
+            return response.WithCreated();
         }
 
-        private async Task PersistBlackGlobeTemperatureHumidityIndexConfort(InsertBGTHIConfortRequest request, Species species, CancellationToken cancellationToken)
+        private async Task PersistBlackGlobeTemperatureHumidityIndexConfort(InsertBlackGlobeTemparuteHumidityIndexConfortRequest request, Species species, CancellationToken cancellationToken)
         {
             var confort = new BlackGlobeTemparuteHumidityIndexConfort
             {

@@ -4,7 +4,6 @@ using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
-using Api.ConfTerm.Domain.ValueObjects;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,22 +24,16 @@ namespace Api.ConfTerm.Application.UseCases
 
         public async Task<ApplicationResponse> Handle(InsertHousingRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            response.CheckFor(!string.IsNullOrEmpty(request.Identificantion), ApplicationError.ArgumentWasInvalid(nameof(request.Identificantion)))
-                .CheckFor(Email.IsValid(request.UserMail), ApplicationError.ArgumentWasInvalid(nameof(request.UserMail)));
-
-            if (!response.Success)
-                return response;
+            var response = ApplicationResponse.OfOk();
 
             var user = await _userRepository.GetByEmailAsync(request.UserMail, cancellationToken);
 
-            if (user == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.UserMail)));
+            if (user == default)
+                return response.WithNotFound(ApplicationError.OfNotFound(nameof(user)));
 
             int housingId = await PersistHousing(request, user, cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created).WithData(new { HousingId = housingId });
+            return response.WithCreated(new { HousingId = housingId });
         }
 
         private async Task<int> PersistHousing(InsertHousingRequest request, User user, CancellationToken cancellationToken)

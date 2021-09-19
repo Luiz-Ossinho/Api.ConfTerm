@@ -4,7 +4,6 @@ using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,16 +26,16 @@ namespace Api.ConfTerm.Application.UseCases
 
         public async Task<ApplicationResponse> Handle(InsertAnimalProductionRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
+            var response = ApplicationResponse.OfOk();
 
             var housing = await _housingRepository.GetByIdAsync(request.HousingId, cancellationToken);
 
-            if (housing == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("Housing", nameof(request.HousingId)));
+            if (housing == default)
+                return response.WithNotFound(ApplicationError.OfNotFound(nameof(housing)));
 
             int animalProductionId = await PersistAnimalProduction(request, housing, cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created).WithData(new { AnimalProductionId = animalProductionId });
+            return response.WithCreated(new { AnimalProductionId = animalProductionId });
         }
 
         private async Task<int> PersistAnimalProduction(InsertAnimalProductionRequest request, Housing housing, CancellationToken cancellationToken)
