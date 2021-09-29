@@ -1,5 +1,5 @@
-﻿using Api.ConfTerm.Application.Abstract;
-using Api.ConfTerm.Application.Objects;
+﻿using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Abstract;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
@@ -25,18 +25,9 @@ namespace Api.ConfTerm.Application.UseCases
 
         public async Task<ApplicationResponse> Handle(InsertUserRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            response.CheckFor(Email.IsValid(request.Email), ApplicationError.ArgumentWasInvalid(nameof(request.Email)))
-                .CheckFor(!string.IsNullOrEmpty(request.Password), ApplicationError.ArgumentWasInvalid(nameof(request.Password)))
-                .CheckFor(!string.IsNullOrEmpty(request.Name), ApplicationError.ArgumentWasInvalid(nameof(request.Name)));
-
-            if (!response.Success)
-                return response;
-
             await PersistUser(request, cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created);
+            return ApplicationResponse.OfOk().WithCreated();
         }
 
         private async Task PersistUser(InsertUserRequest request, CancellationToken cancellationToken = default)

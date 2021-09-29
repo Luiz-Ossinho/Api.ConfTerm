@@ -19,7 +19,11 @@ using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using MediatR;
-using Api.ConfTerm.Application.Abstract;
+using Api.ConfTerm.Application.Objects.Abstract;
+using Api.ConfTerm.Presentation.Objects.Comunication.Mapping;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Api.ConfTerm.Presentation.Objects.Comunication.Validation;
 
 namespace Api.ConfTerm.Presentation.Extensions
 {
@@ -70,6 +74,19 @@ namespace Api.ConfTerm.Presentation.Extensions
         public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
             return services.AddMediatR(typeof(IUseCase<>));
+        }
+
+        public static IServiceCollection AddMapping(this IServiceCollection services)
+        {
+            return services.AddFluentValidation(opt => {
+                opt.RegisterValidatorsFromAssemblyContaining<PerformLoginPresentationRequestValidator>();
+                ValidatorOptions.Global.LanguageManager.Enabled = false;
+            });
+        }
+
+        public static IServiceCollection AddValidation(this IServiceCollection services)
+        {
+            return services.AddAutoMapper(opt => opt.AddProfile<PresentationToApplicationProfile>());
         }
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)

@@ -3,14 +3,12 @@ using Api.ConfTerm.Domain.ValueObjects;
 
 namespace Api.ConfTerm.Application.Objects.Requests
 {
-    public record InsertTemperatureHumidityConfortRequest(
+    public record InsertBlackGlobeTemparuteHumidityIndexConfortRequest(
         int SpeciesId,
         int MinimunAge,
         int MaximunAge,
         ConfortLevel Level,
-        float MinimunTemperature,
-        float MaximunTemperature,
-        float MinimunHumidity,
-        float MaximunHumidity
+        float MinimunBGTHI,
+        float MaximunBGTHI
     ) : InsertConfortAbstractRequest(SpeciesId, MinimunAge, MaximunAge, Level);
 }

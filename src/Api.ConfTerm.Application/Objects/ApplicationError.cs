@@ -1,18 +1,24 @@
-﻿namespace Api.ConfTerm.Application.Objects
+﻿using System.Text.Json.Serialization;
+
+namespace Api.ConfTerm.Application.Objects
 {
     public class ApplicationError
     {
-        public string Value { get; init; }
-        public static ApplicationError WasNullForArgument(string @object, string argument) {
-            return new ApplicationError { Value = $"{@object} was null for the {argument} specified" };
-        }
-        public static ApplicationError ArgumentWasInvalid(string argument)
-        {
-            return new ApplicationError { Value = $"The {argument} specified was invalid" };
-        }
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-    }
+        private ApplicationError() { }
+
+        [JsonIgnore]
+        private string Error { get; init; }
+        [JsonIgnore]
+        private string FieldName { get; init; }
+        public string Value { get => FieldName != default ? $"Error in the field {FieldName}: Value {Error}" : Error; }
+
+        public static ApplicationError Of(string error)
+            => new() { Error = error };
+
+        public static ApplicationError OfNotFound(string objectName)
+            => new() { Error = $"{objectName} was Not Found" };
+
+        public static ApplicationError Of(string error, string fieldName)
+            => new() { Error = error, FieldName = fieldName };
+    };
 }

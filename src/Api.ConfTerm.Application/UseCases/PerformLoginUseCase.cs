@@ -1,15 +1,14 @@
-﻿using Api.ConfTerm.Application.Abstract;
-using Api.ConfTerm.Application.Objects;
+﻿using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Abstract;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
 using Api.ConfTerm.Domain.Interfaces.Services;
-using Api.ConfTerm.Domain.ValueObjects;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class PerformLoginUseCase : IUseCase<LoginRequest>
+    public class PerformLoginUseCase : IUseCase<PerformLoginRequest>
     {
         private readonly IUserRepository _repository;
         private readonly IHashingService _hashingService;
@@ -21,17 +20,14 @@ namespace Api.ConfTerm.Application.UseCases
             _tokenService = tokenService;
         }
 
-        public async Task<ApplicationResponse> Handle(LoginRequest request, CancellationToken cancellationToken = default)
+        public async Task<ApplicationResponse> Handle(PerformLoginRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            if (!Email.IsValid(request.Email))
-                return response.BadRequest();
+            var response = ApplicationResponse.OfOk();
 
             var user = await _repository.GetByEmailAsync(request.Email, cancellationToken);
 
             if (!_hashingService.Compare(request.Password, user.Password, user.Salt))
-                return response.BadRequest();
+                return response.WithBadRequest(ApplicationError.Of("Password doesnt match"));
 
             var token = _tokenService.GenerateTokenForUser(user);
 

@@ -1,12 +1,10 @@
-using Api.ConfTerm.Application.Services;
-using Api.ConfTerm.Domain.Interfaces.Services;
 using Api.ConfTerm.Presentation.Extensions;
+using Api.ConfTerm.Presentation.Filters;
 using Api.ConfTerm.Presentation.Objects;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Api.ConfTerm.Presentation
 {
@@ -22,7 +20,13 @@ namespace Api.ConfTerm.Presentation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(opt=> {
+                opt.Filters.Add<ValidationFilter>();
+            }).AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, true));
+                opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
 
             services.AddDatabases(SetupInformationContext)
                 .AddJwtAuthetication(SetupInformationContext)
@@ -30,7 +34,9 @@ namespace Api.ConfTerm.Presentation
                 .AddAppplicationInfoInjection()
                 .AddRepositories()
                 .AddServices()
-                .AddUseCases();
+                .AddUseCases()
+                .AddMapping()
+                .AddValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

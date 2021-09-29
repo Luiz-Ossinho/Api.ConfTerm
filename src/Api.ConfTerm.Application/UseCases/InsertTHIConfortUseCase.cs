@@ -1,5 +1,5 @@
-﻿using Api.ConfTerm.Application.Abstract;
-using Api.ConfTerm.Application.Objects;
+﻿using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Abstract;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Api.ConfTerm.Application.UseCases
 {
-    public class InsertTHIConfortUseCase : IUseCase<InsertTHIConfortRequest>
+    public class InsertTHIConfortUseCase : IUseCase<InsertTemperatureHumidityIndexConfortRequest>
     {
         private readonly IRepository<TemperatureHumidityIndexConfort> _thiRepository;
         private readonly IRepository<Species> _speciesRepository;
@@ -23,25 +23,21 @@ namespace Api.ConfTerm.Application.UseCases
             _speciesRepository = speciesRepository;
         }
 
-        public async Task<ApplicationResponse> Handle(InsertTHIConfortRequest request, CancellationToken cancellationToken = default)
+        public async Task<ApplicationResponse> Handle(InsertTemperatureHumidityIndexConfortRequest request, CancellationToken cancellationToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            // TODO aplicar validacoes
-            //response.CheckFor()
-            //
+            var response = ApplicationResponse.OfOk();
 
             var species = await _speciesRepository.GetByIdAsync(request.SpeciesId, cancellationToken);
 
-            if (species == null)
-                return response.BadRequest().WithError(ApplicationError.WasNullForArgument("User", nameof(request.SpeciesId)));
+            if (species == default)
+                return response.WithNotFound(ApplicationError.OfNotFound(nameof(species)));
 
             await PersistTemperatureHumidityIndexConfort(request, species, cancellationToken);
 
-            return response.WithCode(HttpStatusCode.Created);
+            return response.WithCreated();
         }
 
-        private async Task PersistTemperatureHumidityIndexConfort(InsertTHIConfortRequest request, Species species, CancellationToken cancellationToken = default)
+        private async Task PersistTemperatureHumidityIndexConfort(InsertTemperatureHumidityIndexConfortRequest request, Species species, CancellationToken cancellationToken = default)
         {
             var confort = new TemperatureHumidityIndexConfort
             {

@@ -1,5 +1,5 @@
-﻿using Api.ConfTerm.Application.Abstract;
-using Api.ConfTerm.Application.Objects;
+﻿using Api.ConfTerm.Application.Objects;
+using Api.ConfTerm.Application.Objects.Abstract;
 using Api.ConfTerm.Application.Objects.Requests;
 using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Repositories;
@@ -22,14 +22,11 @@ namespace Api.ConfTerm.Application.UseCases
 
         public async Task<ApplicationResponse> Handle(InsertSpeciesRequest request, CancellationToken cancelletionToken = default)
         {
-            var response = ApplicationResponse.OfNone();
-
-            if (string.IsNullOrWhiteSpace(request.Name))
-                return response.BadRequest().WithError(ApplicationError.ArgumentWasInvalid(nameof(request.Name)));
+            var response = ApplicationResponse.OfOk();
 
             var speciesId = await PersistSpecies(request, cancelletionToken);
 
-            return response.WithCode(HttpStatusCode.Created).WithData(new { SpeciesId = speciesId });
+            return response.WithCreated(new { SpeciesId = speciesId });
         }
 
         private async Task<int> PersistSpecies(InsertSpeciesRequest request, CancellationToken cancelletionToken)
