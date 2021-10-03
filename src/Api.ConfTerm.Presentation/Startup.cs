@@ -28,7 +28,8 @@ namespace Api.ConfTerm.Presentation
                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
-            services.AddDatabases(SetupInformationContext)
+            services.AddCors(SetupInformationContext)
+                .AddDatabases(SetupInformationContext)
                 .AddJwtAuthetication(SetupInformationContext)
                 .AddSwagger()
                 .AddAppplicationInfoInjection()
@@ -43,13 +44,14 @@ namespace Api.ConfTerm.Presentation
         public void Configure(IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
+            app.UseCors();
 
             ConfigureAppExtensions.EnsureSeed(SetupInformationContext, scope);
             app.AddSwagger(SetupInformationContext, scope);
 
             app.ConfigureExceptions(SetupInformationContext);
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

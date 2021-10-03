@@ -89,6 +89,19 @@ namespace Api.ConfTerm.Presentation.Extensions
             return services.AddAutoMapper(opt => opt.AddProfile<PresentationToApplicationProfile>());
         }
 
+        public static IServiceCollection AddCors(this IServiceCollection services, SetupInformationContext setupInformation)
+        {
+            return services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(policyBuilder =>
+                {
+                    policyBuilder.AllowAnyOrigin();
+                    policyBuilder.AllowAnyMethod();
+                    policyBuilder.AllowAnyHeader();
+                });
+            });
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(opt =>
