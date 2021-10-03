@@ -23,6 +23,10 @@
       },
       "dotnetRunMessages": "true",
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    },
+    "Heroku": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\ejesus\\source\\repos\\ConfTerm\\src\\Api.ConfTerm\\scripts\\publishRelease.bat"
     }
   }
 }

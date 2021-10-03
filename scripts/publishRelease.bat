@@ -1,7 +1,7 @@
 ECHO ON
-cd /d ..\src\Api.ConfTerm.Application
-dotnet publish -c Release .
-heroku container:login
-heroku container:push web -a conf-term
-heroku container:release web -a conf-term
+cd ../../../../../
+cmd /c "heroku container:login"
+cmd /c "heroku container:push web -a conf-term"
+cmd /c "heroku container:release web -a conf-term"
+ECHO "PUSHOU"
 PAUSE
