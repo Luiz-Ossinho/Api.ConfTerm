@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A6E8366-56FD-48F2-97DF-DD17DC4C235F}"
 	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		scripts\publishRelease.bat = scripts\publishRelease.bat
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -14,18 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ignores", "Ignores", "{0584
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{332EC24C-45BB-41D5-AE7B-102E7F39F9C3}"
-	ProjectSection(SolutionItems) = preProject
-		scripts\publishRelease.bat = scripts\publishRelease.bat
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.ConfTerm.Data", "src\Api.ConfTerm.Data\Api.ConfTerm.Data.csproj", "{D93FFCF4-5073-4E6A-B052-244537E23E5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.ConfTerm.Presentation", "src\Api.ConfTerm.Presentation\Api.ConfTerm.Presentation.csproj", "{BF7C9285-1107-4EA1-8496-551254D7220F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.ConfTerm.Presentation", "src\Api.ConfTerm.Presentation\Api.ConfTerm.Presentation.csproj", "{BF7C9285-1107-4EA1-8496-551254D7220F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.ConfTerm.Domain", "src\Api.ConfTerm.Domain\Api.ConfTerm.Domain.csproj", "{AA19FF2E-2A1B-467A-83B4-4319F96DC792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.ConfTerm.Domain", "src\Api.ConfTerm.Domain\Api.ConfTerm.Domain.csproj", "{AA19FF2E-2A1B-467A-83B4-4319F96DC792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.ConfTerm.Application", "src\Api.ConfTerm.Application\Api.ConfTerm.Application.csproj", "{A6DF76E8-35F1-4966-8C4A-5063C458A3C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.ConfTerm.Application", "src\Api.ConfTerm.Application\Api.ConfTerm.Application.csproj", "{A6DF76E8-35F1-4966-8C4A-5063C458A3C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,7 +52,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{05849DCA-A5B6-4E51-8E9B-1C43619A2F42} = {3A6E8366-56FD-48F2-97DF-DD17DC4C235F}
-		{332EC24C-45BB-41D5-AE7B-102E7F39F9C3} = {3A6E8366-56FD-48F2-97DF-DD17DC4C235F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6F5F9156-A556-426B-B803-3E50ECDE727B}
