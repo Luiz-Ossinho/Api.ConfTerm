@@ -91,12 +91,14 @@ namespace Api.ConfTerm.Presentation.Extensions
 
         public static IServiceCollection AddCors(this IServiceCollection services, SetupInformationContext setupInformation)
         {
+            var allowedOrigins = setupInformation.EnviromentVariableReader.AllowedOrigins;
+            var allowedMethods = new string[] { HttpMethods.Get, HttpMethods.Head, HttpMethods.Put, HttpMethods.Patch, HttpMethods.Post, HttpMethods.Delete};
             return services.AddCors(opt =>
             {
                 opt.AddDefaultPolicy(policyBuilder =>
                 {
-                    policyBuilder.AllowAnyOrigin();
-                    policyBuilder.AllowAnyMethod();
+                    policyBuilder.WithOrigins(allowedOrigins);
+                    policyBuilder.WithMethods(allowedMethods);
                     policyBuilder.AllowAnyHeader();
                 });
             });
@@ -135,7 +137,7 @@ namespace Api.ConfTerm.Presentation.Extensions
 
         public static IServiceCollection AddJwtAuthetication(this IServiceCollection services, SetupInformationContext setupInformation)
         {
-            var issuerSigninKey = Encoding.ASCII.GetBytes(setupInformation.Configuration["JwtSecret"]);
+            var issuerSigninKey = Encoding.ASCII.GetBytes(setupInformation.EnviromentVariableReader.JwtSecret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -19,6 +19,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
+        "DATABASE_URL": "DATABASER_URL",
+        "JWT_SECRET": "theonlyleftisthepilot",
+        "AllowedOrigins": "[\"http://localhost:3000\"]",
+        "Superuser": "{\"Username\":\"Superuser\",\"Password\":\"5up3Rus3rP@s5w0rd\", \"Email\":\"superUserEmail@email.domain\",\"HousingIndentification\":\"Development Housing\", \"AnimalProductionEquipament\":\"Development Equipament\"}",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
