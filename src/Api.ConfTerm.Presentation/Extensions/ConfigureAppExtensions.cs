@@ -1,10 +1,7 @@
 ﻿using Api.ConfTerm.Data.Contexts;
-using Api.ConfTerm.Domain.Entities;
 using Api.ConfTerm.Domain.Interfaces.Services;
-using Api.ConfTerm.Domain.ValueObjects;
 using Api.ConfTerm.Presentation.Objects;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -40,40 +37,10 @@ namespace Api.ConfTerm.Presentation.Extensions
 
             context.Database.EnsureCreated();
 
-            var superUser = setupInformation.Configuration.GetSection(nameof(Superuser)).Get<Superuser>();
-            var firstUser = context.Users.FirstOrDefault(b => b.Name == superUser.Username);
-            if (firstUser == null)
+            if (!context.Users.Any())
             {
-                var salt = hashingSerivce.GenerateSalt();
-                var hash = hashingSerivce.GenerateHash(superUser.Password, salt);
-                var user = new User
-                {
-                    Name = superUser.Username,
-                    Salt = salt,
-                    Password = hash,
-                    Email = new Email("emailValido@confTerm.com"),
-                    Type = UserType.Administrator
-                };
-
-                var housing = new Housing
-                {
-                    Identification = "Alojamento de Teste",
-                    Owner = user
-                };
-                user.Housings.Add(housing);
-
-                var now = DateTime.Now;
-                var animalProduction = new AnimalProduction
-                {
-                    Housing = housing,
-                    Birthday = now,
-                    Equipament = "Prototipo de Teste",
-                    MonitoringEnd = now.AddYears(2),
-                    MonitoringStart = now
-                };
-                housing.AnimalProductions.Add(animalProduction);
-
-                context.Users.Add(user);
+                var superuser = setupInformation.EnviromentVariableReader.Superuser;
+                context.Users.Add(superuser.ToUser(hashingSerivce));
             }
 
             context.SaveChanges();
